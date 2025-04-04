@@ -21,9 +21,17 @@ void CSMain(uint3 id : SV_DispatchThreadID)
 	positionXZ += _CameraPositionXZ;//Adding offset to put the square in it's right position in the grid
 
 	float4 absPosCS = abs(mul(_VPMatrix, float4(positionXZ.x, 0, positionXZ.y, 1)));
+	
+    //_InstancesPosWSBuffer.Append(float3(positionXZ.x, 0, positionXZ.y));
 	//Testing if the point is in the frustrum of the camera (with a little offset cause we gonna add a random offset to that in the shader)
-	if (absPosCS.z <= absPosCS.w && absPosCS.y <= absPosCS.w * 1.5 && absPosCS.x <= absPosCS.w * 1.2 && absPosCS.w <= _DrawDistance) {
-		_InstancesPosWSBuffer.Append(float3(positionXZ.x, 0, positionXZ.y));
-	}
+    if (absPosCS.z <= absPosCS.w && absPosCS.y <= absPosCS.w * 9.0 && absPosCS.x <= absPosCS.w * 1.2 && absPosCS.w <= _DrawDistance)
+    {
+        _InstancesPosWSBuffer.Append(float3(positionXZ.x, 0, positionXZ.y));
+    }
+	////Testing if the point is in the frustrum of the camera (with a little offset cause we gonna add a random offset to that in the shader)
+ //   if (absPosCS.z <= absPosCS.w && absPosCS.y <= absPosCS.w * 1.5 && absPosCS.x <= absPosCS.w * 1.2 && absPosCS.w <= _DrawDistance)
+ //   {
+ //       _InstancesPosWSBuffer.Append(float3(positionXZ.x, 0, positionXZ.y));
+ //   }
 }
 

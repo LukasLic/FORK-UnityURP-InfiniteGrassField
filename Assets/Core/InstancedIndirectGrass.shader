@@ -12,6 +12,8 @@
         _BaseColorTexture("_BaseColorTexture", 2D) = "white" {}
         _GroundColor("_GroundColor", Color) = (0.5,0.5,0.5)
 
+        _HeightTexture("_HeightTexture", 2D) = "white" {}
+
         [Header(Grass Shape)]
         _GrassWidth("_GrassWidth", Float) = 1
         _GrassHeight("_GrassHeight", Float) = 1
@@ -95,6 +97,8 @@
                 float4 _BaseColorTexture_ST;
                 half3 _GroundColor;
 
+                float4 _HeightTexture_ST;
+
                 half _RandomNormal;
                 float _OffsetRange;
 
@@ -102,6 +106,7 @@
             CBUFFER_END
 
             sampler2D _BaseColorTexture;
+            sampler2D _HeightTexture;
 
             half3 ApplySingleDirectLight(Light light, half3 N, half3 V, half3 albedo, half positionOSY)
             {
@@ -142,6 +147,16 @@
                 //Adding a random offset to the position
                 perGrassPivotPosWS.x += murmurHash3(perGrassPivotPosWS.x * 23.4643 + perGrassPivotPosWS.z) * _OffsetRange;
                 perGrassPivotPosWS.z += murmurHash3(perGrassPivotPosWS.x * 12.9898 + perGrassPivotPosWS.z * 78.233) * _OffsetRange;
+
+                // Height logic
+                float2 heightTexSampleUv = (perGrassPivotPosWS.xz + float2(100.0, 100.0)) / 200.0;
+                half3 heightColor = tex2Dlod(_HeightTexture, float4(TRANSFORM_TEX(heightTexSampleUv,_HeightTexture),0,0));
+                perGrassPivotPosWS.y = (heightColor.b * 100.0 * 2.0) - 100.0;
+
+                if(heightColor.r > 0.1)
+                {
+                    return OUT;
+                }
 
                 //Billboard Logic
                 float3 cameraTransformRightWS = UNITY_MATRIX_V[0].xyz;

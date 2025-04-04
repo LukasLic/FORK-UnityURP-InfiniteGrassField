@@ -147,10 +147,10 @@ public class InstancedIndirectGrassRenderer : MonoBehaviour
             style);
 
         GUI.Label(new Rect(550, 50, 200, 30), "Density: " + density, style);
-        density = Mathf.Max(1, (int)(GUI.HorizontalSlider(new Rect(550, 90, 200, 30), density / 200, 1, 10)) * 200);
+        density = Mathf.Max(1, (int)(GUI.HorizontalSlider(new Rect(550, 90, 200, 30), density / 200, 1, 20)) * 200);
 
         GUI.Label(new Rect(550, 120, 200, 30), "Draw Distance: " + drawDistance, style);
-        drawDistance = Mathf.Max(1, (int)(GUI.HorizontalSlider(new Rect(550, 160, 200, 30), drawDistance / 60, 1, 10)) * 60);
+        drawDistance = Mathf.Max(1, (int)(GUI.HorizontalSlider(new Rect(550, 160, 200, 30), drawDistance / 60, 1, 20)) * 60);
     }
     
     void OnDisable()
